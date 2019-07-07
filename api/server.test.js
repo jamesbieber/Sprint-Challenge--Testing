@@ -1,41 +1,29 @@
-const requre = require("supertest");
+const supertest = require("supertest");
 const server = require("./server");
 
 describe("server", () => {
   describe("GET /", () => {
     it("responds with 200", () => {
-      return supertest(server)
-        .get("/games")
+      supertest(server)
+        .get("/api/games")
         .expect(200);
     });
 
     it("returns an array", async () => {
-      await supertest(server)
-        .get("/games")
-        .expect(Array.isArray(res.body))
-        .toBe(true);
+      const res = await supertest(server).get("/api/games");
+      expect(Array.isArray(res.body)).toBe(true);
     });
 
     it("returns empty array if 0 games", async () => {
-      await supertest(server)
-        .get("/games")
-        .expect(res.body)
-        .toEqual([]);
-    });
-
-    it('responds with { api: "up"}', async () => {
-      await supertest(server)
-        .get("/games")
-        .then(res => {
-          expect(res.body).toEqual({ api: "up" });
-        });
+      const res = await supertest(server).get("/api/games");
+      expect(res.body).toEqual([]);
     });
   });
 
   describe("POST /", () => {
     it("responds with 200", async () => {
-      await supertest(server)
-        .post("/games")
+      const res = await supertest(server)
+        .post("/api/games")
         .send({
           title: "Pacman",
           genre: "Arcade",
@@ -45,8 +33,8 @@ describe("server", () => {
     });
 
     it("requires a title", async () => {
-      await supertest(server)
-        .post("/games")
+      const res = await supertest(server)
+        .post("/api/games")
         .send({
           title: "",
           genre: "Arcade",
@@ -56,8 +44,8 @@ describe("server", () => {
     });
 
     it("requires a genre", async () => {
-      await supertest(server)
-        .post("/games")
+      const res = await supertest(server)
+        .post("/api/games")
         .send({
           title: "Pacman",
           genre: "",
